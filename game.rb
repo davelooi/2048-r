@@ -8,6 +8,28 @@ def win
 end
 
 def lose
+  if @grid.flatten.include?(0)
+    return false
+  end
+
+  # backup original grid
+  tempGrid = @grid
+
+  # test moves
+  4.times do
+    move_left
+    gridAntiClockwise
+  end
+
+  # nothing moved, means no possible move
+  if @grid == tempGrid
+    # game lost
+    return true
+  end
+
+  #restore original grid
+  @grid = tempGrid
+
   return false
 end
 
