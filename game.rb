@@ -13,6 +13,10 @@ class Game
     @grid.grid = g
   end
 
+  def score
+    @grid.score
+  end
+
   def win
     grid.flatten.max == 2048
   end

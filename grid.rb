@@ -1,9 +1,11 @@
 class Grid
   attr_accessor :grid
+  attr_accessor :score
 
   ### new
   def initialize
     @grid = [[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]]
+    @score = 0
   end
 
   ### add a random new number in an empty random new tile
@@ -48,6 +50,7 @@ class Grid
         if @grid[row][col] == @grid[row][col+1]
           @grid[row][col] = @grid[row][col] * 2
           @grid[row][col+1] = 0
+          @score += @grid[row][col]
         end
       end
     end
