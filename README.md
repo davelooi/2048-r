@@ -8,3 +8,10 @@ To play:
 ```
 ruby main.rb
 ```
+
+To test (run this from the main dir):
+
+```
+rspec
+```
+
