@@ -1,39 +1,58 @@
 require 'io/console'
 require './game.rb'
 require './grid.rb'
-require './tile.rb'
 
 @grid = []
 
 def main
-  newGame
-  pp
+  game = Game.new
+  pp game.grid
 
   play = true
   while play do
     input = STDIN.getch.downcase
     case input
     when /[wasd]/
-      move input
-      pp
+      game.move input
+      pp game.grid
     when /[q]/
       play = false
     when /[c]/  # cheat
-      @grid[0][0] = 2048
-      pp
+      game.cheat
+      pp game.grid
     else
       # do_nothing
     end
 
-    if win
+    if game.win
       puts "You Win..!!!!!!!"
       play = false
     end
-    if lose
+    if game.lose
       puts "Game over.."
       play = false
     end
   end
 end
+
+def pp grid
+  system "clear"
+  puts "WASD to play, Q to quit"
+  puts "+---------------------------+"
+  grid.each do |row|
+    print "|"
+    row.each do |col|
+      if col == 0
+        print "      |"
+      else
+        print " %4d |" % [col]
+      end
+    end
+    print "\n"
+    puts "+---------------------------+"
+  end
+end
+
+
 
 main

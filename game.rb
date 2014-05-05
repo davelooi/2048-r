@@ -1,96 +1,52 @@
-def newGame
-  @grid = newGrid
-  2.times{ addNewTile }
-end
+class Game
+  def initialize
+    @grid = Grid.new
+    2.times{ @grid.addNewTile }
+  end
 
-def win
-  @grid.flatten.max == 2048
-end
+  def grid
+    @grid.grid
+  end
 
-def lose
-  if @grid.flatten.include?(0)
+  def win
+    grid.flatten.max == 2048
+  end
+
+  def lose
+    if grid.flatten.include?(0)
+      return false
+    end
+
+    # backup original grid
+    tempGrid = @grid.clone
+
+    # test moves
+    tempGrid.testMove
+
+    # nothing moved, means no possible move
+    if @grid.grid == tempGrid.grid
+      # game lost
+      return true
+    end
+
     return false
   end
 
-  # backup original grid
-  tempGrid = @grid
-
-  # test moves
-  4.times do
-    move_left
-    gridAntiClockwise
-  end
-
-  # nothing moved, means no possible move
-  if @grid == tempGrid
-    # game lost
-    return true
-  end
-
-  #restore original grid
-  @grid = tempGrid
-
-  return false
-end
-
-def move direction
-  case direction
-  when /w/
-    move_up
-  when /a/
-    move_left
-  when /s/
-    move_down
-  when /d/
-    move_right
-  end
-  addNewTile
-end
-
-def move_up
-  gridAntiClockwise
-  move_left
-  gridAntiClockwise
-  gridAntiClockwise
-  gridAntiClockwise
-end
-
-def move_left
-  shift_left
-  merge_equal
-  shift_left
-end
-
-def move_down
-  gridAntiClockwise
-  gridAntiClockwise
-  gridAntiClockwise
-  move_left
-  gridAntiClockwise
-end
-
-def move_right
-  gridAntiClockwise
-  gridAntiClockwise
-  move_left
-  gridAntiClockwise
-  gridAntiClockwise
-end
-
-def shift_left
-  (0..3).each do |row|
-    @grid[row].delete_if { |x| x == 0 }
-    (4-@grid[row].count).times { @grid[row].push 0 }
-  end
-end
-
-def merge_equal
-  (0..3).each do |row|
-    (0..2).each do |col|
-      if @grid[row][col] == @grid[row][col+1]
-        @grid[row][col] = @grid[row][col] * 2
-        @grid[row][col+1] = 0
-      end
+  def move direction
+    case direction
+    when /w/
+      @grid.move_up
+    when /a/
+      @grid.move_left
+    when /s/
+      @grid.move_down
+    when /d/
+      @grid.move_right
     end
+    @grid.addNewTile
+  end
+
+  def cheat
+    grid[0][0] = 2048
   end
 end
