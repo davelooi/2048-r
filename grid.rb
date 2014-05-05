@@ -25,28 +25,24 @@ class Grid
   end
 
   def countZero
-    count = 0
-    @grid.each do |row|
-      row.each do |col|
-        if col == 0
-          count+=1
-        end
-      end
+    counts = Hash.new 0
+    @grid.flatten.each do |number|
+      counts[number] += 1
     end
-    count
+    counts[0]
   end
 
   ##############
   ### le GAME
   ##############
-  def shift_left
+  def shiftLeft
     (0..3).each do |row|
       @grid[row].delete_if { |x| x == 0 }
       (4-@grid[row].count).times { @grid[row].push 0 }
     end
   end
 
-  def merge_equal
+  def mergeEqual
     (0..3).each do |row|
       (0..2).each do |col|
         if @grid[row][col] == @grid[row][col+1]
@@ -58,11 +54,25 @@ class Grid
   end
 
   ### test possible move
-  def testMove
+  def possibleMove?
+    # backup original grid
+    tempGrid = @grid.clone
+
+    # test moves on all angle
     4.times do
-      move_left
+      moveLeft
       gridAntiClockwise
     end
+
+    # nothing moved, means no possible move
+    if @grid == tempGrid
+      # game lost
+      return false
+    end
+
+    # restore original grid
+    @grid = tempGrid
+    return true
   end
 
   ### Rotate the grid anti-clockwise
@@ -71,33 +81,33 @@ class Grid
   end
 
   ### Move
-  def move_left
-    shift_left
-    merge_equal
-    shift_left
+  def moveLeft
+    shiftLeft
+    mergeEqual
+    shiftLeft
   end
 
-  def move_right
+  def moveRight
     gridAntiClockwise
     gridAntiClockwise
-    move_left
-    gridAntiClockwise
-    gridAntiClockwise
-  end
-
-  def move_up
-    gridAntiClockwise
-    move_left
-    gridAntiClockwise
+    moveLeft
     gridAntiClockwise
     gridAntiClockwise
   end
 
-  def move_down
+  def moveUp
+    gridAntiClockwise
+    moveLeft
     gridAntiClockwise
     gridAntiClockwise
     gridAntiClockwise
-    move_left
+  end
+
+  def moveDown
+    gridAntiClockwise
+    gridAntiClockwise
+    gridAntiClockwise
+    moveLeft
     gridAntiClockwise
   end
 end

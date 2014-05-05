@@ -1,11 +1,16 @@
 class Game
-  def initialize
+  def initialize (startTiles=2)
     @grid = Grid.new
-    2.times{ @grid.addNewTile }
+    # setup initial grid
+    startTiles.times{ @grid.addNewTile }
   end
 
   def grid
     @grid.grid
+  end
+
+  def grid=(g)
+    @grid.grid = g
   end
 
   def win
@@ -17,36 +22,24 @@ class Game
       return false
     end
 
-    # backup original grid
-    tempGrid = @grid.clone
-
-    # test moves
-    tempGrid.testMove
-
-    # nothing moved, means no possible move
-    if @grid.grid == tempGrid.grid
-      # game lost
-      return true
-    end
-
-    return false
+    return !@grid.possibleMove?
   end
 
   def move direction
     case direction
     when /w/
-      @grid.move_up
+      @grid.moveUp
     when /a/
-      @grid.move_left
+      @grid.moveLeft
     when /s/
-      @grid.move_down
+      @grid.moveDown
     when /d/
-      @grid.move_right
+      @grid.moveRight
     end
     @grid.addNewTile
   end
 
   def cheat
-    grid[0][0] = 2048
+    @grid.grid[0][0] = 2048
   end
 end
