@@ -1,6 +1,5 @@
 require 'io/console'
 require './game.rb'
-require './grid.rb'
 
 def main
   game = Game.new
@@ -10,17 +9,22 @@ def main
   while play do
     input = STDIN.getch.downcase
     case input
-    when /[wasd]/
-      game.move input
-      pp game.grid, game.score
+    when /[w]/
+      game.move "up"
+    when /[a]/
+      game.move "left"
+    when /[s]/
+      game.move "down"
+    when /[d]/
+      game.move "right"
     when /[q]/
       play = false
     when /[c]/  # cheat
       game.cheat
-      pp game.grid, game.score
     else
       # do_nothing
     end
+    pp game.grid, game.score
 
     if game.win
       puts "You Win..!!!!!!!"
@@ -55,7 +59,5 @@ def printGrid grid
     puts "+---------------------------+"
   end
 end
-
-
 
 main
