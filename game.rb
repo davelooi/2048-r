@@ -44,6 +44,7 @@ class Game
   # Move
   ###########
   def move direction
+    tempGrid = @grid.clone
     case direction
     when /up/i
       moveUp
@@ -54,7 +55,9 @@ class Game
     when /right/i
       moveRight
     end
-    addNewTile
+
+    # add new tile only if something moved
+    addNewTile if @grid != tempGrid
   end
 
   def moveLeft (addToScore=true)
